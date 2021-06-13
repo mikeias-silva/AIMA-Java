@@ -16,21 +16,37 @@ import java.util.Optional;
 
 /**
  * Tests depth-limited search.
+ * 
  * @author Ruediger Lunde
  */
 public class DepthLimitedSearchTest {
 
 	@Test
 	public void testSuccessfulDepthLimitedSearch() throws Exception {
+		// instância um novo problema, com tabuleiro, açoes possiveis de uma dama,
+		// resultado das açoes e valida se atingiu o objetivo
 		Problem<NQueensBoard, QueenAction> problem = new GeneralProblem<>(new NQueensBoard(8),
-				NQueensFunctions::getIFActions, NQueensFunctions::getResult, NQueensFunctions::testGoal);
+				NQueensFunctions::getIFActions, 
+				NQueensFunctions::getResult, // qual o resultadod aquela ação
+				NQueensFunctions::testGoal); // se atingiu o objetivo
+		// Busca as ações passando com parametros o tabuleiro e as açoes possíveis (utilizando busca em profundidade)
 		SearchForActions<NQueensBoard, QueenAction> search = new DepthLimitedSearch<>(8);
+		// Cria lista de açoes para resolução do problema
 		Optional<List<QueenAction>> actions = search.findActions(problem);
+		// Verifica se a lista nao é null
 		Assert.assertTrue(actions.isPresent());
+		// valida com a resolução ótima
 		assertCorrectPlacement(actions.get());
+		// resoluçao otima de nós expandidos
+		/*
+		 * o 113 é por ser uma arvore bidimensional = 2 e 8 por ser a profundidade da
+		 * arvore ou seja, 2^8 = 256. senndo o nó 113 o menor nó com uma resolução
+		 */
 		Assert.assertEquals("113", search.getMetrics().get("nodesExpanded"));
+
 	}
 
+	// Cutoff é o limite de profundidade da busca da arvore.
 	@Test
 	public void testCutOff() throws Exception {
 		Problem<NQueensBoard, QueenAction> problem = new GeneralProblem<>(new NQueensBoard(8),
@@ -63,4 +79,5 @@ public class DepthLimitedSearchTest {
 		Assert.assertEquals("Action[name=placeQueenAt, location=(6, 1)]", actions.get(6).toString());
 		Assert.assertEquals("Action[name=placeQueenAt, location=(7, 3)]", actions.get(7).toString());
 	}
+
 }

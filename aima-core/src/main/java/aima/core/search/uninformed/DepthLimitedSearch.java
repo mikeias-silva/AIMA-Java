@@ -92,8 +92,10 @@ public class DepthLimitedSearch<S, A> implements SearchForActions<S, A>, SearchF
 	/**
 	 * Returns a solution node, the {@link #cutoffNode}, or null (failure).
 	 */
+	//Passa como parametro o estado atual NODE<S, A>
 	private Node<S, A> recursiveDLS(Node<S, A> node, Problem<S, A> problem, int limit) {
 		// if problem.GOAL-TEST(node.STATE) then return SOLUTION(node)
+		//Verifica se esse nó é a solução
 		if (problem.testSolution(node)) {
 			metrics.set(METRIC_PATH_COST, node.getPathCost());
 			return node;
@@ -153,4 +155,8 @@ public class DepthLimitedSearch<S, A> implements SearchForActions<S, A>, SearchF
 		metrics.set(METRIC_NODES_EXPANDED, 0);
 		metrics.set(METRIC_PATH_COST, 0);
 	}
+        
+        
+    
+            
 }
